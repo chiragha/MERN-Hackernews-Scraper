@@ -3,9 +3,7 @@ import User from "../models/User.js";
 
 const protect = async (req, res, next) => {
   try {
-
     let token;
-
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")
@@ -34,11 +32,8 @@ const protect = async (req, res, next) => {
         message: "User not found",
       });
     }
-
     req.user = user;
-
     next();
-
   } catch (error) {
 
     res.status(401).json({

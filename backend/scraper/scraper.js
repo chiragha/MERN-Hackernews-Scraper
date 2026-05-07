@@ -20,9 +20,7 @@ const scrapeStories = async () => {
 
     $(".athing").each((i, el) => {
 
-      // Only top 10 stories
       if (i < 10) {
-
         const title = $(el)
           .find(".titleline a")
           .text();

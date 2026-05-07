@@ -1,7 +1,6 @@
 import User from "../models/User.js";
 import Story from "../models/Story.js";
 
-
 // GET ALL STORIES
 export const getAllStories = async (req, res) => {
   try {
@@ -22,7 +21,7 @@ export const getAllStories = async (req, res) => {
   }
 };
 
-// GET SINGLE STORY 
+// GET SINGLE STORY
 export const getSingleStory = async (req, res) => {
   try {
     const story = await Story.findById(req.params.id);
@@ -49,46 +48,28 @@ export const getSingleStory = async (req, res) => {
 // TOGGLE BOOKMARK
 export const toggleBookmark = async (req, res) => {
   try {
-
     const storyId = req.params.id;
-
     const user = req.user;
-
     const story = await Story.findById(storyId);
-
     if (!story) {
       return res.status(404).json({
         success: false,
         message: "Story not found",
       });
     }
-
-    const alreadyBookmarked =
-      user.bookmarks.includes(storyId);
-
+    const alreadyBookmarked = user.bookmarks.includes(storyId);
     if (alreadyBookmarked) {
-
-      user.bookmarks = user.bookmarks.filter(
-        (id) => id.toString() !== storyId
-      );
-
+      user.bookmarks = user.bookmarks.filter((id) => id.toString() !== storyId);
     } else {
-
       user.bookmarks.push(storyId);
     }
-
     await user.save();
-
     res.status(200).json({
       success: true,
-      message: alreadyBookmarked
-        ? "Bookmark removed"
-        : "Bookmark added",
+      message: alreadyBookmarked ? "Bookmark removed" : "Bookmark added",
       bookmarks: user.bookmarks,
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: error.message,
@@ -96,26 +77,18 @@ export const toggleBookmark = async (req, res) => {
   }
 };
 
-
-// get bookmarks 
+// get bookmarks
 export const getBookmarks = async (req, res) => {
   try {
-
-    const user = await req.user.populate(
-      "bookmarks"
-    );
-
+    const user = await req.user.populate("bookmarks");
     res.status(200).json({
       success: true,
       bookmarks: user.bookmarks,
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: error.message,
     });
   }
 };
-

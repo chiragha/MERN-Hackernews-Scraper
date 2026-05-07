@@ -6,7 +6,6 @@ import jwt from "jsonwebtoken";
 export const registerUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const userExists = await User.findOne({ email });
 
     if (userExists) {
@@ -17,28 +16,19 @@ export const registerUser = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const user = await User.create({
       email,
       password: hashedPassword,
     });
 
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
-
     res.status(201).json({
       success: true,
       message: "User registered successfully",
-      token,
       user: {
         id: user._id,
         email: user.email,
       },
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -70,11 +60,9 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
 
     res.status(200).json({
       success: true,
@@ -85,7 +73,6 @@ export const loginUser = async (req, res) => {
         email: user.email,
       },
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -112,14 +99,11 @@ export const logoutUser = async (req, res) => {
 // GET CURRENT USER
 export const getMe = async (req, res) => {
   try {
-
     res.status(200).json({
       success: true,
       user: req.user,
     });
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: error.message,

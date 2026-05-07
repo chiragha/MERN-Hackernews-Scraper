@@ -3,13 +3,9 @@ import mongoose from "mongoose";
 const storySchema = new mongoose.Schema(
   {
     title: String,
-
     url: String,
-
     points: Number,
-
     author: String,
-
     postedAt: String,
   },
   {
