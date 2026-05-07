@@ -169,9 +169,11 @@ http://localhost:5173
 
 ## Frontend
 - Vercel
+- https://mern-hackernews-scraper.vercel.app/
 
 ## Backend
 - Render
+- https://mern-hackernews-scraper.onrender.com/
 
 
 
