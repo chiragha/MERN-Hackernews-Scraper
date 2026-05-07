@@ -1,13 +1,26 @@
 import express from "express";
-import Story from "../models/Story.js";
+
 import protect from "../middleware/authMiddleware.js";
+
+import {
+  getAllStories,
+  getSingleStory,
+  toggleBookmark,
+} from "../controllers/storyController.js";
 
 const router = express.Router();
 
-router.get("/stories", protect, (req, res) => {
-  res.json({
-    message: "Protected stories route",
-  });
-});
+// GET ALL STORIES
+router.get("/stories", getAllStories);
+
+// GET SINGLE STORY
+router.get("/stories/:id", getSingleStory);
+
+// TOGGLE BOOKMARK
+router.post(
+  "/stories/:id/bookmark",
+  protect,
+  toggleBookmark
+);
 
 export default router;

@@ -1,7 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import protect from "./middleware/authMiddleware.js";
+
+import scrapeStories from "./scraper/scraper.js";
+
 import scrapeRoutes from "./routes/scrapeRoutes.js";
 import storyRoutes from "./routes/storyRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
@@ -16,7 +18,12 @@ app.use(express.json());
 
 try {
   await mongoose.connect(process.env.MONGO_URI);
+
   console.log("MongoDB Connected");
+
+  // AUTO SCRAPER RUN
+  await scrapeStories();
+
 } catch (error) {
   console.log(error.message);
 }

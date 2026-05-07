@@ -12,12 +12,17 @@ const scrapeStories = async () => {
     $(".athing").each((i, el) => {
       if (i < 10) {
         const title = $(el).find(".titleline a").text();
+
         const url = $(el).find(".titleline a").attr("href");
 
         const subtext = $(el).next().find(".subtext");
 
-        const points = subtext.find(".score").text();
+        const pointsText = subtext.find(".score").text();
+
+        const points = parseInt(pointsText) || 0;
+
         const author = subtext.find(".hnuser").text();
+
         const postedAt = subtext.find(".age").text();
 
         stories.push({
