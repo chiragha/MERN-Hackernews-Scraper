@@ -24,7 +24,7 @@ function Register() {
 
       toast.success("Account created successfully");
 
-      navigate("/");
+     navigate("/login");
     } catch (err) {
       console.log(err);
 

@@ -19,16 +19,25 @@ const login = async (email, password) => {
 };
 
   // register
-  const register = async (name, email, password) => {
-    const { data } = await api.post("/auth/register", {
-      name,
-      email,
-      password,
-    });
+ const register = async (email, password) => {
 
-    localStorage.setItem("token", data.token);
-    setUser(data.user);
-  };
+  try {
+
+    const { data } = await api.post(
+      "/auth/register",
+      {
+        email,
+        password,
+      }
+    );
+
+    return data;
+
+  } catch (error) {
+
+    throw error;
+  }
+};
 
   // logout
   const logout = () => {
