@@ -4,12 +4,13 @@ import mongoose from "mongoose";
 
 import scrapeRoutes from "./routes/scrapeRoutes.js";
 import storyRoutes from "./routes/storyRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 const app = express();
 
 dotenv.config();
 
-const port = process.env.PORT || 4001;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -26,7 +27,10 @@ app.get("/", (req, res) => {
 
 // ROUTES
 app.use("/api/v1", scrapeRoutes);
+
 app.use("/api/v1", storyRoutes);
+
+app.use("/api/v1/auth", authRoutes);
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
