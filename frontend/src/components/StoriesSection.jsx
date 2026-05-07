@@ -6,24 +6,40 @@ import Pagination from "./Pagination";
 import { getStories } from "../services/storyService";
 
 function StoriesSection() {
+
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = 5;
+
   useEffect(() => {
+
     const fetchStories = async () => {
+
       try {
-        const data = await getStories();
+
+        const data = await getStories(currentPage);
+
+        console.log(data);
 
         setStories(data.stories);
+
       } catch (error) {
+
         console.log(error);
+
       } finally {
+
         setLoading(false);
+
       }
     };
 
     fetchStories();
-  }, []);
+
+  }, [currentPage]);
 
   if (loading) {
     return (
@@ -35,9 +51,11 @@ function StoriesSection() {
 
   return (
     <section className="bg-zinc-950 py-16">
+
       <div className="mx-auto max-w-7xl px-6">
 
         <div className="mb-10 flex items-center justify-between">
+
           <h2 className="text-3xl font-bold text-white">
             Trending Stories
           </h2>
@@ -45,20 +63,28 @@ function StoriesSection() {
           <p className="text-zinc-400">
             {stories.length} stories
           </p>
+
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+
           {stories.map((story) => (
             <StoryCard
               key={story._id}
               story={story}
             />
           ))}
+
         </div>
 
-        <Pagination />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
 
       </div>
+
     </section>
   );
 }
