@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-
+import cors from "cors";
 import scrapeStories from "./scraper/scraper.js";
 
 import scrapeRoutes from "./routes/scrapeRoutes.js";
@@ -13,7 +13,12 @@ const app = express();
 dotenv.config();
 
 const port = process.env.PORT || 3000;
-
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 try {
