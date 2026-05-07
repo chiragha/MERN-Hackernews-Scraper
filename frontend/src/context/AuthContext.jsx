@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // login
+
 const login = async (email, password) => {
   const { data } = await api.post("/auth/login", {
     email,
@@ -18,7 +18,7 @@ const login = async (email, password) => {
   setUser(data.user); 
 };
 
-  // register
+
  const register = async (email, password) => {
 
   try {
@@ -39,13 +39,13 @@ const login = async (email, password) => {
   }
 };
 
-  // logout
+
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
   };
 
-  // load user (optional but good)
+
   const loadUser = async () => {
     try {
       const { data } = await api.get("/auth/me");

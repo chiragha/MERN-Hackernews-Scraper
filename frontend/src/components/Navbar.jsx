@@ -22,7 +22,6 @@ function Navbar() {
 
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
 
-        {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <div className="rounded-xl bg-blue-600 p-2">
             <Newspaper size={22} className="text-white" />
@@ -38,7 +37,7 @@ function Navbar() {
           </div>
         </Link>
 
-        {/* Navigation */}
+      
         <nav className="hidden items-center gap-8 md:flex">
 
           <Link to="/" className="text-sm text-zinc-300 hover:text-blue-400">
@@ -52,10 +51,10 @@ function Navbar() {
 
         </nav>
 
-        {/* AUTH BUTTONS */}
+       
         <div className="flex items-center gap-3">
 
-          {/* IF USER IS LOGGED IN */}
+       
           {user ? (
             <button
              onClick={handleLogout}
