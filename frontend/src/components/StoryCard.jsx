@@ -30,7 +30,7 @@ function StoryCard({ story }) {
         </p>
 
         <p>
-          {story.time || "Recently"}
+         {story.postedAt || "Recently"}
         </p>
 
       </div>

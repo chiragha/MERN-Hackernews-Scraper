@@ -1,29 +1,50 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
+
 import Story from "../models/Story.js";
+
 const scrapeStories = async () => {
   try {
-    const { data } = await axios.get("https://news.ycombinator.com");
+
+    // Remove old stories
+    await Story.deleteMany();
+
+    // Fetch Hacker News HTML
+    const { data } = await axios.get(
+      "https://news.ycombinator.com"
+    );
 
     const $ = cheerio.load(data);
 
     const stories = [];
 
     $(".athing").each((i, el) => {
+
+      // Only top 10 stories
       if (i < 10) {
-        const title = $(el).find(".titleline a").text();
 
-        const url = $(el).find(".titleline a").attr("href");
+        const title = $(el)
+          .find(".titleline a")
+          .text();
 
-        const subtext = $(el).next().find(".subtext");
+        const url = $(el)
+          .find(".titleline a")
+          .attr("href");
 
-        const pointsText = subtext.find(".score").text();
+        const subtext = $(el)
+          .next()
+          .find(".subtext");
 
-        const points = parseInt(pointsText) || 0;
+        const points =
+          parseInt(
+            subtext.find(".score").text()
+          ) || 0;
 
-        const author = subtext.find(".hnuser").text();
+        const author =
+          subtext.find(".hnuser").text();
 
-        const postedAt = subtext.find(".age").text();
+        const postedAt =
+          subtext.find(".age").text();
 
         stories.push({
           title,
@@ -35,12 +56,13 @@ const scrapeStories = async () => {
       }
     });
 
-    await Story.deleteMany();
     await Story.insertMany(stories);
 
-    console.log("Scraped successfully");
-  } catch (err) {
-    console.log(err);
+    console.log("Top 10 stories scraped");
+
+  } catch (error) {
+
+    console.log(error);
   }
 };
 
