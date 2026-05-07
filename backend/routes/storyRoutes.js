@@ -6,6 +6,7 @@ import {
   getAllStories,
   getSingleStory,
   toggleBookmark,
+  getBookmarks,
 } from "../controllers/storyController.js";
 
 const router = express.Router();
@@ -21,6 +22,13 @@ router.post(
   "/stories/:id/bookmark",
   protect,
   toggleBookmark
+);
+
+//get bookmarked
+router.get(
+  "/bookmarks",
+  protect,
+  getBookmarks
 );
 
 export default router;

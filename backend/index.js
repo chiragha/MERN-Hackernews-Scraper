@@ -21,17 +21,26 @@ app.use(
 );
 app.use(express.json());
 
-try {
-  await mongoose.connect(process.env.MONGO_URI);
+const startServer = async () => {
+  try {
 
-  console.log("MongoDB Connected");
+    await mongoose.connect(process.env.MONGO_URI);
 
-  // AUTO SCRAPER RUN
-  await scrapeStories();
+    console.log("MongoDB Connected");
 
-} catch (error) {
-  console.log(error.message);
-}
+    await scrapeStories();
+
+    app.listen(port, () => {
+      console.log(`Server listening on port ${port}`);
+    });
+
+  } catch (error) {
+
+    console.log(error.message);
+  }
+};
+
+startServer();
 
 app.get("/", (req, res) => {
   res.send("API Running");

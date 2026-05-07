@@ -49,18 +49,31 @@ export const getSingleStory = async (req, res) => {
 // TOGGLE BOOKMARK
 export const toggleBookmark = async (req, res) => {
   try {
-    const user = await User.findById(req.user);
 
     const storyId = req.params.id;
+
+    const user = req.user;
+
+    const story = await Story.findById(storyId);
+
+    if (!story) {
+      return res.status(404).json({
+        success: false,
+        message: "Story not found",
+      });
+    }
 
     const alreadyBookmarked =
       user.bookmarks.includes(storyId);
 
     if (alreadyBookmarked) {
+
       user.bookmarks = user.bookmarks.filter(
         (id) => id.toString() !== storyId
       );
+
     } else {
+
       user.bookmarks.push(storyId);
     }
 
@@ -73,7 +86,9 @@ export const toggleBookmark = async (req, res) => {
         : "Bookmark added",
       bookmarks: user.bookmarks,
     });
+
   } catch (error) {
+
     res.status(500).json({
       success: false,
       message: error.message,
@@ -81,15 +96,18 @@ export const toggleBookmark = async (req, res) => {
   }
 };
 
-export const getAllStories = async (req, res) => {
+
+// get bookmarks 
+export const getBookmarks = async (req, res) => {
   try {
 
-    const stories = await Story.find()
-      .sort({ points: -1 });
+    const user = await req.user.populate(
+      "bookmarks"
+    );
 
     res.status(200).json({
       success: true,
-      stories,
+      bookmarks: user.bookmarks,
     });
 
   } catch (error) {
@@ -100,3 +118,4 @@ export const getAllStories = async (req, res) => {
     });
   }
 };
+

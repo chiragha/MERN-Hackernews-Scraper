@@ -7,7 +7,6 @@ export const registerUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // CHECK USER EXISTS
     const userExists = await User.findOne({ email });
 
     if (userExists) {
@@ -17,20 +16,29 @@ export const registerUser = async (req, res) => {
       });
     }
 
-    // HASH PASSWORD
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // CREATE USER
     const user = await User.create({
       email,
       password: hashedPassword,
     });
 
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
     res.status(201).json({
       success: true,
       message: "User registered successfully",
-      user,
+      token,
+      user: {
+        id: user._id,
+        email: user.email,
+      },
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -44,7 +52,6 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // FIND USER
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -54,11 +61,7 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    // CHECK PASSWORD
-    const isMatch = await bcrypt.compare(
-      password,
-      user.password
-    );
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return res.status(400).json({
@@ -67,22 +70,22 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    // CREATE JWT TOKEN
     const token = jwt.sign(
-      {
-        id: user._id,
-      },
+      { id: user._id },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "7d",
-      }
+      { expiresIn: "7d" }
     );
 
     res.status(200).json({
       success: true,
       message: "User login successful",
       token,
+      user: {
+        id: user._id,
+        email: user.email,
+      },
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -99,6 +102,24 @@ export const logoutUser = async (req, res) => {
       message: "User logged out successfully",
     });
   } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// GET CURRENT USER
+export const getMe = async (req, res) => {
+  try {
+
+    res.status(200).json({
+      success: true,
+      user: req.user,
+    });
+
+  } catch (error) {
+
     res.status(500).json({
       success: false,
       message: error.message,
