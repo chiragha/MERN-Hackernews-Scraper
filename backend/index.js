@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-
+import protect from "./middleware/authMiddleware.js";
 import scrapeRoutes from "./routes/scrapeRoutes.js";
 import storyRoutes from "./routes/storyRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
