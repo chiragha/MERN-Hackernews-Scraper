@@ -1,9 +1,15 @@
-import React from 'react'
+import Navbar from "../components/Navbar";
+import Hero from "../components/Hero";
+import StoriesSection from "../components/StoriesSection";
 
-const Home = () => {
+function Home() {
   return (
-    <div>Home</div>
-  )
+    <div className="min-h-screen bg-zinc-950">
+      <Navbar />
+      <Hero />
+      <StoriesSection />
+    </div>
+  );
 }
 
-export default Home
+export default Home;
